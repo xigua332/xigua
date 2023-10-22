@@ -1,0 +1,52 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Xigua {
+    mapping(address => bool) private blacklist;
+    uint256 private constant totalSupply = 1000000000;
+    uint256 private constant feePercentage = 2;
+    uint256 private totalFees;
+
+    function addToBlacklist(address user) public {
+        blacklist[user] = true;
+    }
+
+    function removeFromBlacklist(address user) public {
+        blacklist[user] = false;
+    }
+
+    function isBlacklisted(address user) public view returns (bool) {
+        return blacklist[user];
+    }
+
+    function mint() public {
+        // mint new tokens
+    }
+
+    function burn(uint256 amount) public {
+        // burn tokens
+    }
+
+    function transfer(address recipient, uint256 amount) public payable {
+        require(amount <= balanceOf(msg.sender), "Insufficient balance");
+        require(!isBlacklisted(msg.sender), "You are blacklisted");
+
+        uint256 fee = (amount * feePercentage) / 100;
+        uint256 netAmount = amount - fee;
+
+        _transfer(msg.sender, recipient, netAmount);
+        totalFees += fee;
+    }
+
+    function balanceOf(address account) public view returns (uint256) {
+        // return balance of account
+    }
+
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) private {
+        // transfer tokens from sender to recipient
+    }
+}
